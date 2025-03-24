@@ -13,8 +13,7 @@ defmodule Cashier.Application do
       {Phoenix.PubSub, name: Cashier.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Cashier.Finch},
-      # Start a worker by calling: Cashier.Worker.start_link(arg)
-      # {Cashier.Worker, arg},
+      Cashier.Catalog.CsvAgent,
       # Start to serve requests, typically the last entry
       CashierWeb.Endpoint
     ]
