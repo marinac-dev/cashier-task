@@ -1,0 +1,4 @@
+product_code,promotion_type,threshold,discount
+GR1,buy_one_get_one_free,1,0
+SR1,bulk_discount,3,4.50
+CF1,percentage_discount,3,0.33333
