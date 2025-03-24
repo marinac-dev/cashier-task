@@ -1,5 +1,166 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
-/* This file is for your main application CSS */
+/* NOTE: Legacy support for plugins since Tailwind v4 is CSS first */
+@config "../tailwind.config.js";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Your custom CSS here */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+}
+
+.content {
+  @apply flex-1 overflow-y-auto p-6;
+
+  .navbar {
+    @apply flex items-center justify-between mb-8;
+
+    .logo {
+      @apply flex text-2xl font-medium justify-center items-center space-x-2;
+    }
+
+    .menu {
+      @apply flex items-center space-x-4;
+
+      .theme-toggle {
+        @apply rounded-lg cursor-pointer p-2.5 text-sm text-zinc-600 hover:bg-zinc-100 focus:outline-none focus:ring-4 focus:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:focus:ring-zinc-700;
+      }
+
+      .cart-toggle {
+        @apply rounded-lg cursor-pointer p-2.5 text-zinc-600 hover:bg-zinc-100 focus:outline-none focus:ring-4 focus:ring-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:focus:ring-zinc-700;
+      }
+    }
+  }
+
+  .filters-and-search {
+    @apply mb-8 container mx-auto;
+
+    .filters {
+      @apply flex space-x-4 mb-6 overflow-x-auto pb-2;
+
+      .blocked {
+        @apply px-4 py-2 bg-white text-gray-700 rounded-full shadow-sm whitespace-nowrap cursor-not-allowed;
+        @apply dark:bg-zinc-800 dark:text-zinc-400;
+      }
+    }
+
+    .search {
+      @apply relative mb-8;
+
+      .search-input {
+        @apply w-full py-3 px-4 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-gray-300 transition;
+        @apply dark:bg-zinc-800 dark:text-zinc-100 dark:ring-zinc-700 dark:focus:ring-zinc-700;
+      }
+    }
+  }
+
+  .product-grid {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 container mx-auto;
+
+    .product-card {
+      @apply bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow dark:bg-gray-800 dark:text-gray-100;
+
+      .poster {
+        @apply h-32 flex items-center justify-center bg-gray-50 rounded-lg mb-3 dark:bg-zinc-800;
+
+        img {
+          @apply h-24 w-24 object-contain;
+        }
+      }
+
+      .add-to-cart {
+        @apply flex p-1.5 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition-colors;
+        @apply dark:bg-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-600 cursor-pointer;
+      }
+    }
+  }
+
+  .cart-sidebar {
+    @apply w-80 fixed right-0 top-0 h-full overflow-y-auto;
+    @apply bg-white border-l border-gray-200 shadow-xl transform;
+    @apply transition-transform duration-300 ease-in-out z-10;
+    @apply dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-100;
+
+    .header {
+      @apply p-4 border-b border-gray-200 flex justify-between items-center dark:border-zinc-700;
+
+      .close-cart {
+        @apply flex p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer;
+        @apply dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-400;
+      }
+    }
+
+    .cart-items {
+      @apply flex-1 p-4 space-y-4 overflow-y-auto;
+
+      .item {
+        @apply flex items-center justify-between;
+
+        .decrement {
+          @apply flex p-1 rounded-full hover:bg-gray-100 transition-colors cursor-pointer;
+          @apply dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-400;
+        }
+
+        .remove {
+          @apply flex p-1 rounded-full transition-colors text-gray-500 cursor-pointer;
+          @apply dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-400;
+          @apply hover:bg-red-400 dark:hover:bg-red-600 hover:text-white;
+        }
+      }
+    }
+    .cart-total {
+      @apply p-4 border-t border-gray-200 dark:border-zinc-700;
+
+      .checkout-btn {
+        @apply w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium disabled:bg-gray-300 disabled:cursor-not-allowed;
+        @apply dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-400 dark:disabled:bg-zinc-800 dark:disabled:cursor-not-allowed;
+        @apply hover:text-white dark:hover:text-white;
+      }
+    }
+  }
+
+  .receipt-modal {
+    @apply flex fixed inset-0 bg-black/25 items-center justify-center backdrop-blur-sm z-20;
+    @apply dark:bg-black/50;
+
+    .modal-content {
+      @apply bg-white rounded-xl shadow-xl w-full max-w-md mx-4 overflow-hidden transform transition-all;
+      @apply dark:bg-zinc-800 dark:text-zinc-100;
+
+      .header {
+        @apply flex justify-between items-center mb-4;
+
+        .title {
+          @apply text-lg font-medium;
+        }
+
+        .close-modal {
+          @apply p-1 rounded-full hover:bg-gray-100 transition-colors flex cursor-pointer;
+          @apply dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-400;
+        }
+      }
+
+      .receipt {
+        @apply bg-gray-50 p-4 rounded-lg mb-4;
+        font-family: "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .actions {
+        @apply flex space-x-3;
+
+        .cancel-btn {
+          @apply flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium;
+          @apply dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700;
+        }
+
+        .confirm-btn {
+          @apply flex-1 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium;
+          @apply dark:bg-zinc-700 dark:hover:bg-zinc-600 dark:text-zinc-400;
+          @apply hover:text-white dark:hover:text-white;
+        }
+      }
+    }
+  }
+}

@@ -26,6 +26,11 @@ defmodule Cashier.Checkout do
     |> Float.round(2)
   end
 
+  def checkout_products(products) do
+    promotions = Catalog.get_promotions()
+    apply_promotions(products, promotions)
+  end
+
   defp apply_promotions(products, promotions) do
     products
     |> Enum.group_by(& &1.product_code)

@@ -1,0 +1,129 @@
+<main class="content">
+  <nav class="navbar">
+    <div class="logo">
+      <img src={~p"/images/logo.webp"} width="42" class="rounded" />
+      <h1 class="text-2xl font-medium">El Cashier</h1>
+    </div>
+    <div class="menu">
+      <button type="button" id="theme-toggle" phx-hook="ThemeToggle" class="theme-toggle">
+        <.icon name="hero-moon h-5 w-5 hidden dark:block" />
+        <.icon name="hero-sun h-5 w-5 block dark:hidden" />
+      </button>
+
+      <button type="button" class="cart-toggle" phx-click={JS.remove_class("translate-x-full", to: "#cart-sidebar")}>
+        <.icon name="hero-shopping-cart h-5 w-5" />
+      </button>
+    </div>
+  </nav>
+
+  <div class="filters-and-search">
+    <div class="filters">
+      <button class="px-4 py-2 bg-gray-900 text-white rounded-full shadow-sm whitespace-nowrap dark:bg-gray-800">
+        All Items
+      </button>
+      <button class="blocked" title="Coming soon!">Beverages</button>
+      <button class="blocked" title="Coming soon!">Bakery</button>
+      <button class="blocked" title="Coming soon!">Produce</button>
+      <button class="blocked" title="Coming soon!">Dairy</button>
+    </div>
+
+    <div class="search">
+      <input type="text" placeholder="Search products... (Coming soon)" class="search-input" />
+      <.icon class="h-5 w-5 absolute right-4 top-3.5 text-gray-400" name="hero-magnifying-glass" />
+    </div>
+  </div>
+
+  <section class="product-grid">
+    <.product_item :for={product <- @products} product={product} />
+  </section>
+
+  <aside class="cart-sidebar translate-x-full" id="cart-sidebar" phx-click-away={JS.add_class("translate-x-full")}>
+    <div class="flex flex-col h-full">
+      <div class="header">
+        <h2 class="text-lg font-medium">Your Bag</h2>
+        <button class="close-cart" phx-click={JS.add_class("translate-x-full", to: "#cart-sidebar")}>
+          <.icon name="hero-x-mark h-5 w-5" />
+        </button>
+      </div>
+
+      <div class="cart-items">
+        <div :if={@checkout == []} class="text-gray-500 text-center pt-8">Your bag is empty</div>
+        <.cart_item :for={group <- @checkout} group={group} />
+      </div>
+
+      <div class="cart-total">
+        <div class="mb-4 space-y-2">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Subtotal</span>
+            <span id="subtotal">${Enum.sum_by(@checkout, & &1.subtotal)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500" title="Yaay free tax!">
+              Tax (0%) <.icon name="hero-information-circle h-4 w-4 text-gray-400" />
+            </span>
+            <span id="tax">
+              $0.00
+            </span>
+          </div>
+          <div class="flex justify-between font-medium text-lg">
+            <span>Total</span>
+            <span id="total">${Enum.sum_by(@checkout, & &1.subtotal)}</span>
+          </div>
+        </div>
+        <button class="checkout-btn" phx-click={JS.remove_class("hidden!", to: "#receipt-modal")}>Checkout</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="receipt-modal hidden!" id="receipt-modal">
+    <div class="modal-content" phx-click-away={JS.add_class("hidden!", to: "#receipt-modal")}>
+      <div class="p-6">
+        <div class="header">
+          <h3 class="title">Confirm Purchase</h3>
+          <button id="close-modal" class="close-modal" phx-click={JS.add_class("hidden!", to: "#receipt-modal")}>
+            <.icon name="hero-x-mark h-5 w-5" />
+          </button>
+        </div>
+
+        <div class="receipt">
+          <h4 class="font-medium mb-2 text-center">Receipt</h4>
+          <div class="text-sm text-center mb-2">
+            <div>Elegant Cashier</div>
+            <div>420 Elegant St.</div>
+            <p>{DateTime.utc_now() |> Calendar.strftime("%B %d, %Y • %I:%M %p")}</p>
+          </div>
+
+          <div class="border-t border-dashed border-gray-300 my-2"></div>
+          <div id="receipt-items" class="text-sm mb-2 space-y-1">
+            <div :for={group <- @checkout} class="flex justify-between">
+              <span>{get_p_count(group)}x {get_p_name(group)}</span>
+              <span>{Float.round(group.subtotal, 2)}</span>
+            </div>
+          </div>
+          <div class="border-t border-dashed border-gray-300 my-2"></div>
+          <div class="text-sm">
+            <div class="flex justify-between">
+              <span>Subtotal:</span>
+              <span id="receipt-subtotal">${Enum.sum_by(@checkout, & &1.subtotal)}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Tax (8%):</span>
+              <span id="receipt-tax">$0.00</span>
+            </div>
+            <div class="flex justify-between font-medium">
+              <span>Total:</span>
+              <span id="receipt-total">${Enum.sum_by(@checkout, & &1.subtotal)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="cancel-checkout" class="cancel-btn">Cancel</button>
+          <button id="confirm-checkout" class="confirm-btn">
+            Confirm • <span id="confirm-amount">${Enum.sum_by(@checkout, & &1.subtotal)}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -89,6 +89,7 @@ defmodule CashierWeb do
       import Phoenix.HTML
       # Core UI components
       import CashierWeb.CoreComponents
+      import CashierWeb.CashierComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
