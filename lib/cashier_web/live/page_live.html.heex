@@ -118,7 +118,7 @@
         </div>
 
         <div class="actions">
-          <button id="cancel-checkout" class="cancel-btn">Cancel</button>
+          <button class="cancel-btn" phx-click={JS.add_class("hidden!", to: "#receipt-modal")}>Cancel</button>
           <button id="confirm-checkout" class="confirm-btn">
             Confirm • <span id="confirm-amount">${Enum.sum_by(@checkout, & &1.subtotal)}</span>
           </button>

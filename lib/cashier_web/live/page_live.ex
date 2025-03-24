@@ -41,7 +41,7 @@ defmodule CashierWeb.PageLive do
   end
 
   def handle_event("remove", %{"product_code" => product_code}, socket) do
-    new_cart = Enum.reject(socket.assigns.cart, fn p -> p.code == product_code end)
+    new_cart = Enum.reject(socket.assigns.cart, fn p -> p.product_code == product_code end)
     checkout = Checkout.checkout_products(new_cart)
 
     socket =
